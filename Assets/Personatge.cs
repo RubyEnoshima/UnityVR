@@ -25,13 +25,13 @@ public class Personatge : MonoBehaviour
         {
             UnityEngine.XR.InputDevice device = leftHandDevices[0];
             Vector2 triggerValue;
-            device.TryGetFeatureValue(primary2DAxis, out triggerValue);
-            Debug.Log(triggerValue);
-            float x = triggerValue[0];
-            float z = triggerValue[1];
-            if(x>-0.2f && x<0.2f) x = 0;
-            if(z>-0.2f && z<0.2f) z = 0;
-            transform.position = new Vector3(transform.position.x + x, transform.position.y, transform.position.z + z); 
+            // device.TryGetFeatureValue(primary2DAxis, out triggerValue);
+            // Debug.Log(triggerValue);
+            // float x = triggerValue[0];
+            // float z = triggerValue[1];
+            // if(x>-0.2f && x<0.2f) x = 0;
+            // if(z>-0.2f && z<0.2f) z = 0;
+            // transform.position = new Vector3(transform.position.x + x, transform.position.y, transform.position.z + z); 
         }else{
             Debug.Log("No conectado");
         }
