@@ -6,10 +6,12 @@ public class Destructible : MonoBehaviour {
 
 	public GameObject destroyedVersion;	// Reference to the shattered version of the object
 	public AudioClip clip;
+	public float salud = 10f;
 	Rigidbody rb;
 
 	void Start() {
 		rb = GetComponent<Rigidbody>();
+		gameObject.tag = "Destruible";
 	}
 
 	void Destruir(){
@@ -25,8 +27,13 @@ public class Destructible : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag=="Bala" || collision.relativeVelocity.magnitude > rb.mass*9.8f)
+        if (collision.relativeVelocity.magnitude > rb.mass*9.8f)
             Destruir();
     }
+
+	public void Dany(float dany){
+		salud -= dany;
+		if(salud<=0f) Destruir();
+	}
 
 }
