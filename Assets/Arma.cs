@@ -11,72 +11,57 @@ public class Arma : MonoBehaviour
     AudioSource so;
 
     public Transform apuntar;
-    public LineRenderer laser;
-    public Transform laserOrigen;
 
-    bool aLaMa = false;
+    public ParticleSystem ps;
+
     float temps = 0f;
+    bool pressionat = false;
 
     // Start is called before the first frame update
     void Start()
     {
         so = GetComponent<AudioSource>();
+        gameObject.tag = "Arma";
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        Laser();
-        if(Input.GetKey("a")) Interactuar();
-        // if(aLaMa){
-        //     var leftHandDevices = new List<UnityEngine.XR.InputDevice>();
-        //     UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.LeftHand, leftHandDevices);
-        //     if(leftHandDevices.Count == 1)
-        //     {
-        //         UnityEngine.XR.InputDevice device = leftHandDevices[0];
-        //         Vector2 triggerValue;
-        //         // device.TryGetFeatureValue(primary2DAxis, out triggerValue);
-        //         // Debug.Log(triggerValue);
-        //         // float x = triggerValue[0];
-        //         // float z = triggerValue[1];
-        //         // if(x>-0.2f && x<0.2f) x = 0;
-        //         // if(z>-0.2f && z<0.2f) z = 0;
-        //         // transform.position = new Vector3(transform.position.x + x, transform.position.y, transform.position.z + z); 
-        //     }
-        // }
-    }
-
-    void Laser(){
-        laser.SetPosition(0,laserOrigen.position);
-        RaycastHit hit;
-        if(Physics.Raycast(laserOrigen.position,laserOrigen.forward, out hit)){
-            if(hit.collider){
-                laser.SetPosition(1,hit.point);
-            }
-        }else laser.SetPosition(1,laserOrigen.forward * rang);
+        if(Input.GetKey("a") || pressionat) Interactuar();
     }
 
     public void Interactuar(){
+        pressionat = true;
         if(Time.time>=temps) {
             temps = Time.time + 1f/velocitatFoc;
             Disparar();
         }
     }
 
+    public void Deixar(){
+        pressionat = false;
+    }
+
     void Disparar(){
         // AudioSource.PlayClipAtPoint(so,transform.position);
         so.Play();
+        ps.Play();
         RaycastHit hit;
         if(Physics.Raycast(apuntar.position, apuntar.forward, out hit, rang)){
             GameObject objectiu = hit.collider.gameObject;
-            Debug.Log(objectiu.tag);
+            // Debug.Log(objectiu.tag);
             if(objectiu.tag=="Destruible"){
                 objectiu.GetComponent<Destructible>().Dany(dany);
+            }else if(objectiu.tag=="Personaje"){
+                objectiu.GetComponent<animationStateController>().QuitarVida(dany);
             }
 
-            if(objectiu.tag!="Estatic" && objectiu.tag!="Pizarra")
+            if(hit.rigidbody && objectiu.tag!="Estatic" && objectiu.tag!="Pizarra")
                 hit.rigidbody.AddForce(-hit.normal * impacte);
         }
+
+        Globals.balasDisparadas++;
         // Debug.DrawRay(apuntar.position,apuntar.forward,Color.red,500f);
 
     }

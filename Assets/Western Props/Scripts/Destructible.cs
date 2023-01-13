@@ -14,9 +14,11 @@ public class Destructible : MonoBehaviour {
 		gameObject.tag = "Destruible";
 	}
 
-	void Destruir(){
+	public void Destruir(){
 		AudioSource.PlayClipAtPoint(clip,transform.position);
+		
 		Instantiate(destroyedVersion, transform.position, transform.rotation);
+		Globals.cosasRotas++;
 		Destroy(gameObject);
 	}
 

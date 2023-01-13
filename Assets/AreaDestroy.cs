@@ -6,6 +6,7 @@ public class AreaDestroy : MonoBehaviour
 {
     void OnCollisionEnter(Collision collision)
     {
-        Destroy(collision.gameObject);
+        // Destroy(collision.gameObject);
+        collision.transform.position = new Vector3(0,6,0);
     }
 }
